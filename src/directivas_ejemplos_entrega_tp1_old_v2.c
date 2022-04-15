@@ -31,3 +31,26 @@
 //
 //	return EXIT_SUCCESS;
 //}
+
+
+
+//int maximoArray(int arrayNumeros[], int tam, int *maximo, int *posicion){
+//	int i;
+//	int ingresoMax;
+//	int posicionAux;
+//	int retorno = -1;
+//
+//	if (arrayNumeros != NULL && tam > 0 && maximo != NULL){
+//		for (i = 0; i < tam; i++){
+//			if ( i == 0 || ingresoMax < arrayNumeros[i]){
+//				ingresoMax = arrayNumeros[i];
+//				posicionAux = i;
+//				retorno = 0;
+//			}
+//		}
+//	}
+//
+//	*maximo = ingresoMax;
+//	*posicion = posicionAux;
+//	return 0;
+//}

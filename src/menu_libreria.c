@@ -39,21 +39,14 @@ void mostrarOpciones(char *opciones[], int cantOpciones) {
 
 	int i = 0;
 	for (i; i < cantOpciones; i++) {
-
-		printf("(%d)-\t", i+1);
 		printf(opciones[i]);
-	}
+		printf("\n");
+	};
 
 }
 
 void imprimirResultadoConValor(char mensaje[], float valor) {
-
-	//variable que se imprimirá al final
-	char mensajeImprimir[] = "\t";
-
-	//concateno el mensaje que quiero imprimir
-	strcat(mensajeImprimir, mensaje);
-	strcat(mensajeImprimir, "%f");
-
-	printf(mensajeImprimir, valor);
+	printf("%s", mensaje);
+	printf("%.2f", valor);
+	printf("\n");
 }
