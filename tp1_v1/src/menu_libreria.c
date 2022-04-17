@@ -131,7 +131,7 @@ void MenuPrincipal() {
 		mostrarOpciones(opcionesIngresoPrecioVuelos, cantOpcionesMenuDos);
 
 
-		mostrarOpciones(opcionesResultados, cantOpcionesMenuTres);
+//		mostrarOpciones(opcionesResultados, cantOpcionesMenuTres);
 		//TODO chequear 136----> tira error
 		mostrarOpciones(opcionesTresCalculosTotales, cantOpcionesMenuTres);
 
