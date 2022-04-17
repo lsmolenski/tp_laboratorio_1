@@ -65,6 +65,10 @@ void MenuPrincipal() {
 	const float precioLatamForzado = 159339;
 
 	int valoresCompletos = 0;
+	int valoresXCompleto =0;
+	int valoresYCompleto =0;
+	int valoresZCompleto =0;
+
 	float x,y,z = 0;
 	float *cantKMIngresados;
 
@@ -80,6 +84,8 @@ void MenuPrincipal() {
 //	valorFinalCredito = getPrecioTCred(precio);
 //	valorFinalDebito = getPrecioTDeb(precio);
 
+	float resultadosY[3];
+	float resultadosZ[3];
 
 
 	char *opcionesMenuUnoIngresoKM[] = { "1. Ingresar Kilómetros: (km = x)" };
@@ -105,13 +111,17 @@ void MenuPrincipal() {
 	int cantOpcionesSalir = 1;
 
 	char *opcionesResultados[] ={
-			"  a) Tarjeta de débito (descuento 10%)",
-			"  b) Tarjeta de crédito (interés 25%)",
-			"  c) Bitcoin (1BTC -> 4606954.55 Pesos Argentinos)",
-			"  d) Mostrar precio por km (precio unitario)",
-			"  e) Mostrar diferencia de precio ingresada (Latam - Aerolíneas)"
+			"  a) Tarjeta de débito (descuento 10%): $",
+			"  b) Tarjeta de crédito (interés 25%): $",
+			"  c) Bitcoin (1BTC -> 4606954.55 Pesos Argentinos): ",
 		};
-	int cantOpcionesResultadosCalculos = 5;
+	int cantOpcionesResultadosCalculos = 3;
+
+	char *opcionesResultadosSimples[] = {
+			"  d) Mostrar precio por km (precio unitario): $",
+			"  e) Mostrar diferencia de precio ingresada (Latam - Aerolíneas): $"
+	};
+	int cantOpcionesResultadosSimples = 2;
 
 
 
@@ -121,8 +131,12 @@ void MenuPrincipal() {
 		mostrarOpciones(opcionesIngresoPrecioVuelos, cantOpcionesMenuDos);
 		mostrarOpciones(opcionesTresCalculosTotales, cantOpcionesMenuTres);
 		mostrarOpciones(opcionesResultados, cantOpcionesResultadosCalculos);
+		mostrarOpciones(opcionesResultadosSimples, cantOpcionesResultadosSimples);
+
+
 		mostrarOpciones(opcionesCuatro, cantOpcionesMenuCuatro);
 		mostrarOpciones(opcionesResultados, cantOpcionesResultadosCalculos);
+		mostrarOpciones(opcionesResultadosSimples, cantOpcionesResultadosSimples);
 		mostrarOpciones(opcionesCinco, cantOpcionesMenuCinco);
 		mostrarOpciones(opcionesSalir, cantOpcionesSalir);
 
@@ -138,6 +152,7 @@ void MenuPrincipal() {
 				do {
 					auxIngresoKmValido = getFloat(opcionesMenuUnoIngresoKM[0], 5, 1, 999999, "Ingreso incorrecto, reingrese KMs: ", &x);
 //					printf(" \n km ingresados: %f\n",x);
+					valoresXCompleto = 1;
 					if( auxIngresadoY && auxIngresadoZ && auxIngresoKmValido){
 						valoresCompletos = 1;
 					}
@@ -147,28 +162,19 @@ void MenuPrincipal() {
 
 
 			case (2):
-				//
-				printf("\n MENU INGRESO PRECIO DE VUELOS:\n");
 
-
+				//PREGUNTAR QUÉ AEROLINEA INGRESAR CON Y O Z
 				getChar("Elegir aerolinea: ", 5, "Opcion inválida, reintente: ",  &aerolineaElegida);
 
-
-				//TODO:PREGUNTAR QUÉ AEROLINEA INGRESAR CON Y O Z
 				if (aerolineaElegida == 'y'){
-					printf("letra ingresada es la Y\n");
+//					printf("letra ingresada es la Y\n");
 					auxIngresadoY = getPreciosAerolinea("Ingrese precio vuelo en Aerolineas Argentinas: ", &y);
+					valoresYCompleto = 1;
 
 				}else if (aerolineaElegida == 'z'){
-					printf("letra ingresada es la Z\n");
+//					printf("letra ingresada es la Z\n");
 					auxIngresadoZ = getPreciosAerolinea("Ingrese precio vuelo en LATAM: ", &z);
-				}
-
-
-//				char opcElegidaLetra = getChar(mensaje, reintentos, mensajeError, pOpcionIngresada)
-
-				if( auxIngresadoY && auxIngresadoZ && auxIngresoKmValido ){
-					valoresCompletos = 1;
+					valoresZCompleto = 1;
 				}
 
 				//setear una variable que diga VALORCOMPLETOS que permita hacer los calculos si estan completos
@@ -176,6 +182,16 @@ void MenuPrincipal() {
 
 			case (3):
 				/*CALCULO DE PRECIOS*/
+					if(valoresXCompleto ){
+						if (valoresYCompleto){
+							//calculo para y
+						}else if (valoresZCompleto){
+							//calculo para z
+						}
+
+						//TODO UNIFICAR DE QUE MANERA SE LLENAN LOS DATOS DEL VECTOR O SE LLAMAN PARA MOSTRAR LOS DATOS
+
+					}
 				//SI X,Y,Z no son nulos entonces puedo calcular, si no, no puedo
 
 				//if variablesCompletas --> calcular los costos
@@ -187,8 +203,12 @@ void MenuPrincipal() {
 				//INFORMAR RESULTADOS
 				printf("\n INFORMAR RESULTADOS:\n");
 
-				if (y > 0 && z > 0 && x > 0) {
+				if (valoresCompletos) {
 					printf("\n KMs Ingresados: %d km\n",x);
+
+					char *mensajes={"hola"};
+					//TODO: NUEVO
+//					mostrarResultadoDos("Aerolineas ",x,y);
 
 					mostrarResultado("Aerolineas ",x,y);
 					mostrarResultado("Latam ",x,z);
@@ -204,9 +224,13 @@ void MenuPrincipal() {
 				//CARGA FORZADA
 				printf("\n CARGA FORZADA:\n");
 
-				printf("\n KMs Ingresados: %d km\n",kmForzado);
-				mostrarResultado("Aerolineas ",kmForzado,precioAerolineasForzado);
-				mostrarResultado("Latam ",kmForzado,precioLatamForzado);
+				x = kmForzado;
+				y = precioAerolineasForzado;
+				z = precioLatamForzado;
+				valoresCompletos = 1;
+//				printf("\n KMs Ingresados: %d km\n",kmForzado);
+//				mostrarResultado("Aerolineas ",kmForzado,precioAerolineasForzado);
+//				mostrarResultado("Latam ",kmForzado,precioLatamForzado);
 			//FORZAR CALCULOS CON LOS DATOS FORZADOS
 
 				break;
@@ -214,37 +238,47 @@ void MenuPrincipal() {
 				//SALIR
 					deseaSalir = 1;
 				break;
-			default:
-				deseaSalir = 1;
-				break;
+
 		};
+		if( valoresZCompleto && valoresXCompleto && valoresYCompleto ){
+			valoresCompletos = 1;
+		}
+		resultadosY[0] = getPrecioTDeb(y);
+		resultadosY[1] = getPrecioTCred(y);
+		resultadosY[2] = getConversionPesosBT(y, BTCOIN);
+
+		resultadosZ[0] = getPrecioTDeb(z);
+		resultadosZ[1] = getPrecioTCred(z);
+		resultadosZ[2] = getConversionPesosBT(z, BTCOIN);
+		printf(" \n resultados: %.f,- %.f,- %.f",resultadosY[0],resultadosY[1],resultadosY[2]);
+
+
+		//TODO CHEQUEAR
+		mostrarResultadoDos(3, opcionesResultados, resultadosY);
+		mostrarResultadoDos(3, opcionesResultados, resultadosZ);
+//		mostrarOpciones(resultadosY,3);
+
+//		printf("\n resultado de Y----> %.2f",resultadosY[0]);
+
+//		precioACred = getPrecioTCred(precioVuelo);
+//		precioBT = getConversionPesosBT(precioVuelo, BTCOIN);
+
 	}while (!deseaSalir || !esRtaValida);
 	system("pause");
 };
 
 /************************************************************************************************************************/
-//void mostrarResultadoDos(char nombreAero[], float kmTotales, float precioVuelo, char *vectorOpciones[],float *vectorResultados) {
-//	float precioACred;
-//	float precioADeb;
-//	float precioBT;
-////	float precioUnitario;
-//
-//
-//	if (nombreAero != NULL && kmTotales > 0 && precioVuelo > 0){
-//		printf("\nPrecio %s: $%.2f\n",nombreAero,precioVuelo);
-////		printf("%s\n",nombreAero);
-//		precioACred = getPrecioTCred(precioVuelo);
-//		precioADeb = getPrecioTDeb(precioVuelo);
-//		precioBT = getConversionPesosBT(precioVuelo, BTCOIN);
-////		float precioUnitario = precioVuelo / kmTotales;
-////		float diferenciaPrecio = y - z;
-//
-//	}
-//
-//	printf("calculo 1: tcred: %.2f\n", precioACred);
-//	printf("calculo 2: tcred: %.2f\n", precioADeb);
-//	printf("calculo 3: btcoin: %.6f\n", precioBT);
-//};
+void mostrarResultadoDos(int cantOpciones, char *vectorOpciones[],float vectorResultados[]) {
+	int i = 0;
+
+	printf("\n");
+	for (i; i < cantOpciones; i++) {
+		printf(vectorOpciones[i]);
+		printf("%.2f",vectorResultados[i]);
+		printf("\n");
+	};
+
+};
 
 
 void mostrarResultado(char nombreAero[], float kmTotales, float precioVuelo) {
@@ -307,7 +341,16 @@ void mostrarOpciones(char *opciones[], int cantOpciones) {
 
 
 void imprimirResultadoConValor(char mensaje[], float valor) {
-	printf("%s", mensaje);
-	printf("%.2f", valor);
-	printf("\n");
+
+	if (mensaje != NULL){
+		printf("%s", mensaje);
+		if (valor == 0){
+			printf("%s", "r");
+		}else {
+			printf("%.2f", valor);
+		}
+		printf("\n");
+	}
+
+
 }
