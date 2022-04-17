@@ -84,8 +84,8 @@ void MenuPrincipal() {
 //	valorFinalCredito = getPrecioTCred(precio);
 //	valorFinalDebito = getPrecioTDeb(precio);
 
-	float resultadosY[3];
-	float resultadosZ[3];
+	float resultadosY[3]={0};
+	float resultadosZ[3]={0};
 
 
 	char *opcionesMenuUnoIngresoKM[] = { "1. Ingresar Kilómetros: (km = x)" };
@@ -111,17 +111,17 @@ void MenuPrincipal() {
 	int cantOpcionesSalir = 1;
 
 	char *opcionesResultados[] ={
-			"  a) Tarjeta de débito (descuento 10%): $",
-			"  b) Tarjeta de crédito (interés 25%): $",
+			"  a) Tarjeta de débito (descuento 10%):$ ",
+			"  b) Tarjeta de crédito (interés 25%):$ ",
 			"  c) Bitcoin (1BTC -> 4606954.55 Pesos Argentinos): ",
+			"  d) Mostrar precio por km (precio unitario):$ "
 		};
-	int cantOpcionesResultadosCalculos = 3;
+	int cantOpcionesResultadosCalculos = 4;
 
 	char *opcionesResultadosSimples[] = {
-			"  d) Mostrar precio por km (precio unitario): $",
-			"  e) Mostrar diferencia de precio ingresada (Latam - Aerolíneas): $"
+			"  e) Mostrar diferencia de precio ingresada (Latam - Aerolíneas):$ "
 	};
-	int cantOpcionesResultadosSimples = 2;
+	int cantOpcionesResultadosSimples = 1;
 
 
 
@@ -129,20 +129,34 @@ void MenuPrincipal() {
 //		system("cls");
 		mostrarOpciones(opcionesMenuUnoIngresoKM, cantOpcionesMenuUno);
 		mostrarOpciones(opcionesIngresoPrecioVuelos, cantOpcionesMenuDos);
+
+
+		mostrarOpciones(opcionesResultados, cantOpcionesMenuTres);
+		//TODO chequear 136----> tira error
 		mostrarOpciones(opcionesTresCalculosTotales, cantOpcionesMenuTres);
+
+		//muestro el menu de las 4 opciones a,b,c,d
 		mostrarOpciones(opcionesResultados, cantOpcionesResultadosCalculos);
+
+
 		mostrarOpciones(opcionesResultadosSimples, cantOpcionesResultadosSimples);
 
 
 		mostrarOpciones(opcionesCuatro, cantOpcionesMenuCuatro);
-		mostrarOpciones(opcionesResultados, cantOpcionesResultadosCalculos);
+		//
+//		mostrarOpciones(opcionesResultados, cantOpcionesResultadosCalculos);
+
+		//todo chequear 148 y 149
+		mostrarResultadoDos(cantOpcionesResultadosCalculos, opcionesResultados, resultadosZ,"Latam");
+		mostrarResultadoDos(cantOpcionesResultadosCalculos, opcionesResultados, resultadosY,"Aerolíneas");
+
 		mostrarOpciones(opcionesResultadosSimples, cantOpcionesResultadosSimples);
 		mostrarOpciones(opcionesCinco, cantOpcionesMenuCinco);
 		mostrarOpciones(opcionesSalir, cantOpcionesSalir);
 
+
+		//Pido opcion al usuario
 		esRtaValida = getInt("Ingrese una opcion: ", 1, 1, CANT_OPCIONES, "Opcion inválida, reingrese opcion: ", &opcionElegida);
-
-
 
 	/*****************************	SWITCH	************************************/
 		switch (opcionElegida) {
@@ -201,19 +215,14 @@ void MenuPrincipal() {
 				break;
 			case (4):
 				//INFORMAR RESULTADOS
+				system("cls");
 				printf("\n INFORMAR RESULTADOS:\n");
 
 				if (valoresCompletos) {
-					printf("\n KMs Ingresados: %d km\n",x);
+//					printf("\n KMs Ingresados: %d km\n",x);
+					mostrarResultadoDos(cantOpcionesResultadosCalculos, opcionesResultados, resultadosZ,"Latam");
+					mostrarResultadoDos(cantOpcionesResultadosCalculos, opcionesResultados, resultadosY,"Aerolíneas");
 
-					char *mensajes={"hola"};
-					//TODO: NUEVO
-//					mostrarResultadoDos("Aerolineas ",x,y);
-
-					mostrarResultado("Aerolineas ",x,y);
-					mostrarResultado("Latam ",x,z);
-
-					//					float precioFinal  = (precioOrig, esInteres, valorPorcentaje, precioFinal);
 				} else {
 					printf("\n Falta ingresar alguno de los valores para realizar calculos \n");
 				}
@@ -243,22 +252,25 @@ void MenuPrincipal() {
 		if( valoresZCompleto && valoresXCompleto && valoresYCompleto ){
 			valoresCompletos = 1;
 		}
-		resultadosY[0] = getPrecioTDeb(y);
-		resultadosY[1] = getPrecioTCred(y);
-		resultadosY[2] = getConversionPesosBT(y, BTCOIN);
+		if (valoresCompletos){
+			//los valores estan completos entonces puedo calcular lo necesario
+			resultadosY[0] = getPrecioTDeb(y);
+			resultadosY[1] = getPrecioTCred(y);
+			resultadosY[2] = getConversionPesosBT(y, BTCOIN);
+			resultadosY[3] = getPrecioPorKM(x,y);
 
-		resultadosZ[0] = getPrecioTDeb(z);
-		resultadosZ[1] = getPrecioTCred(z);
-		resultadosZ[2] = getConversionPesosBT(z, BTCOIN);
-		printf(" \n resultados: %.f,- %.f,- %.f",resultadosY[0],resultadosY[1],resultadosY[2]);
+			resultadosZ[0] = getPrecioTDeb(z);
+			resultadosZ[1] = getPrecioTCred(z);
+			resultadosZ[2] = getConversionPesosBT(z, BTCOIN);
+			resultadosZ[3] = getPrecioPorKM(x,z);
+		}
 
-
-		//TODO CHEQUEAR
-		mostrarResultadoDos(3, opcionesResultados, resultadosY);
-		mostrarResultadoDos(3, opcionesResultados, resultadosZ);
+		//TODO CHEQUEAR - NO BORRAR
+//		mostrarResultadoDos(3, opcionesResultados, resultadosY);
+//		mostrarResultadoDos(3, opcionesResultados, resultadosZ);
 //		mostrarOpciones(resultadosY,3);
 
-//		printf("\n resultado de Y----> %.2f",resultadosY[0]);
+
 
 //		precioACred = getPrecioTCred(precioVuelo);
 //		precioBT = getConversionPesosBT(precioVuelo, BTCOIN);
@@ -268,15 +280,24 @@ void MenuPrincipal() {
 };
 
 /************************************************************************************************************************/
-void mostrarResultadoDos(int cantOpciones, char *vectorOpciones[],float vectorResultados[]) {
+void mostrarResultadoDos(int cantOpciones, char *vectorOpciones[],float vectorResultados[], char aerolinea[]) {
 	int i = 0;
-
+	if (cantOpciones > 0 && vectorOpciones != NULL && vectorResultados != NULL && aerolinea != NULL ){
 	printf("\n");
+	printf(aerolinea);
+	printf(":\n");
 	for (i; i < cantOpciones; i++) {
 		printf(vectorOpciones[i]);
-		printf("%.2f",vectorResultados[i]);
+		if (vectorResultados[i] == 0){
+			printf("%s","r");
+		}else {
+			printf("%.2f",vectorResultados[i]);
+		}
 		printf("\n");
 	};
+
+	};
+
 
 };
 

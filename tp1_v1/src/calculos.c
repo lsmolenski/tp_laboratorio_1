@@ -76,6 +76,10 @@ float getPrecioTDeb(float precioInicial){
 	return valorFinal;
 };
 
+float getPrecioPorKM(float precioViaje, float cantKm){
+	return precioViaje/cantKm;
+};
+
 //Devuelve conversion Pesos a BitCoin
 float getConversionPesosBT(float precioPasaje, float precioBTActual){
 	float retornoBT;
